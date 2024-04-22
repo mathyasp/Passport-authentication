@@ -36,12 +36,12 @@ passport.use(new GithubStrategy({
     clientSecret: process.env.github_clientSecret,
     callbackURL: process.env.github_callbackURL
   },
-  (accessToken, refreshToken, profile, done) => {
-    process.nextTick(function () {
-      return done(null, profile);
+  (accessToken, refreshToken, profile, cb) => {
+    User.findOrCreate({ githubId: profile.id }, function (err, user) {
+      return cb(err, user);
     });
   }
-  ));
+));
 
 
 // Configure Passport authenticated session persistence.

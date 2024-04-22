@@ -27,7 +27,24 @@ router.post('/login',
     });
 
 // TODO: Complete route to logout of passport session    
-router.get('/logout', /*implement the logout route with req.logout()*/);
+router.get('/logout', function(req, res, next){
+    req.logout(function(err) {
+        if (err) { 
+            return next(err); 
+        }
+        res.redirect('/');
+    });
+
+// Github route
+router.get('/auth/github',
+    passport.authenticate('github'));
+    
+router.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/profile');
+  });    
+});
 
 
 // connectEnsureLogin acting as route guard to make sure the routes can't be accessed if not logged in
